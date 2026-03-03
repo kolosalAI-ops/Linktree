@@ -618,6 +618,174 @@ body {
 .btn-reset:hover { color: #f87171; }
 
 /* ============================================
+   SEARCH BAR
+   ============================================ */
+.search-wrap {
+  position: relative;
+  width: 100%;
+  margin-bottom: 20px;
+}
+
+.search-input {
+  width: 100%;
+  padding: 10px 40px 10px 14px;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  color: var(--text);
+  font-family: var(--font-ui);
+  font-size: 14px;
+  outline: none;
+  transition: border-color var(--ease), background var(--ease);
+}
+
+.search-input:focus {
+  border-color: rgba(99, 120, 247, 0.55);
+  background: rgba(255, 255, 255, 0.06);
+}
+
+.search-input::placeholder { color: var(--muted); }
+
+.search-clear {
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: none;
+  border: none;
+  color: var(--muted);
+  font-size: 18px;
+  line-height: 1;
+  padding: 2px 4px;
+  cursor: pointer;
+  transition: color var(--ease);
+}
+
+.search-clear:hover { color: var(--text); }
+
+.no-results {
+  text-align: center;
+  color: var(--text-dim);
+  font-size: 14px;
+  padding: 30px 0;
+  opacity: 0.6;
+}
+
+/* ============================================
+   EDIT / COPY BUTTONS + CLICK COUNTER + DRAG
+   ============================================ */
+.link-edit {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 22px;
+  height: 22px;
+  min-width: 22px;
+  background: rgba(99, 120, 247, 0.1);
+  border: 1px solid rgba(99, 120, 247, 0.18);
+  border-radius: 5px;
+  color: #8a9ef8;
+  cursor: pointer;
+  flex-shrink: 0;
+  opacity: 0;
+  transition: opacity var(--ease), background var(--ease), border-color var(--ease);
+  padding: 0;
+}
+
+.link-btn:hover .link-edit { opacity: 1; }
+
+.link-edit:hover {
+  background: rgba(99, 120, 247, 0.22);
+  border-color: rgba(99, 120, 247, 0.35);
+}
+
+.link-copy {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 22px;
+  height: 22px;
+  min-width: 22px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 5px;
+  color: var(--text-dim);
+  cursor: pointer;
+  flex-shrink: 0;
+  opacity: 0;
+  transition: opacity var(--ease), background var(--ease), border-color var(--ease);
+  padding: 0;
+}
+
+.link-btn:hover .link-copy { opacity: 1; }
+
+.link-copy:hover {
+  background: rgba(255, 255, 255, 0.1);
+  border-color: rgba(255, 255, 255, 0.2);
+}
+
+.link-copy.copied {
+  background: var(--green-dim);
+  border-color: var(--green-border);
+  color: var(--green);
+}
+
+.link-clicks {
+  font-size: 10px;
+  color: var(--muted);
+  flex-shrink: 0;
+  opacity: 0;
+  transition: opacity var(--ease);
+  min-width: 16px;
+  text-align: right;
+}
+
+.link-btn:hover .link-clicks { opacity: 1; }
+
+.link-btn.dragging { opacity: 0.35; }
+
+.link-btn.drag-over {
+  border-color: rgba(99, 120, 247, 0.6);
+  box-shadow:
+    0 0 0 2px rgba(99, 120, 247, 0.2),
+    0 8px 24px rgba(0, 0, 0, 0.35);
+}
+
+/* ============================================
+   TOOLS ROW (Export / Import)
+   ============================================ */
+.tools-row {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  margin-bottom: 20px;
+  width: 100%;
+}
+
+.btn-tool {
+  display: inline-flex;
+  align-items: center;
+  padding: 7px 16px;
+  background: transparent;
+  color: var(--text-dim);
+  border: 1px solid var(--border);
+  border-radius: 50px;
+  font-family: var(--font-ui);
+  font-size: 12px;
+  font-weight: 500;
+  cursor: pointer;
+  text-decoration: none;
+  transition: border-color var(--ease), color var(--ease), background var(--ease);
+}
+
+.btn-tool:hover {
+  border-color: var(--accent-border);
+  color: var(--text);
+  background: var(--accent-dim);
+}
+
+/* ============================================
    RESPONSIVE
    ============================================ */
 @media (max-width: 480px) {

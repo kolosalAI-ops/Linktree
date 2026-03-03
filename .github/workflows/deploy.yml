@@ -53,8 +53,8 @@ jobs:
 
       - name: Check link count
         run: |
-          count=$(grep -c 'class="link-btn"' index.html)
-          echo "  Found $count link buttons"
+          count=$(grep -c "label: '" script.js)
+          echo "  Found $count link definitions"
           if [ "$count" -lt 10 ]; then
             echo "  ✗ Expected at least 10 links, found $count"
             exit 1

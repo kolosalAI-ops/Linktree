@@ -35,6 +35,12 @@
       <p class="profile-bio">AI-powered operations &amp; financial intelligence</p>
     </header>
 
+    <!-- ── Search ─────────────────────────────────────── -->
+    <div class="search-wrap">
+      <input class="search-input" id="search-input" type="text" placeholder="Search links…" autocomplete="off" aria-label="Search links" />
+      <button class="search-clear" id="search-clear" aria-label="Clear search" style="display:none">×</button>
+    </div>
+
     <!-- ── Links (rendered by script.js) ─────────────── -->
     <main class="links-container" id="links-container" aria-label="Navigation links"></main>
 
@@ -43,6 +49,13 @@
       <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
       Add Link
     </button>
+
+    <!-- ── Tools (Export / Import) ───────────────────── -->
+    <div class="tools-row">
+      <button class="btn-tool" id="btn-export">↓ Export</button>
+      <label class="btn-tool" for="import-file">↑ Import</label>
+      <input type="file" id="import-file" accept=".json" hidden />
+    </div>
 
     <!-- ── Social ──────────────────────────────────────── -->
     <section class="socials" aria-label="Social media">
@@ -85,9 +98,10 @@
             <option value="Other" selected>Other</option>
           </select>
         </div>
+        <input type="hidden" id="input-id" />
         <div class="modal-actions">
           <button type="button" class="btn-secondary" id="btn-cancel">Cancel</button>
-          <button type="submit" class="btn-primary">Add Link</button>
+          <button type="submit" class="btn-primary" id="btn-submit">Add Link</button>
         </div>
       </form>
       <div class="modal-footer">

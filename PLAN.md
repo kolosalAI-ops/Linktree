@@ -301,20 +301,6 @@ The following features are queued for future implementation. Each builds on the 
 
 ---
 
-### Feature 7 — PIN-Protected Edit Mode
-**Goal:** Lock add / delete / edit controls behind a 4-digit PIN so the page can be shared publicly without risk of accidental changes.
-
-**Implementation sketch:**
-- Store a hashed PIN in localStorage (`kolosal_pin`); default = no PIN (edit mode always unlocked)
-- Add a lock/unlock icon in the top-right corner of `.container`
-- When locked: FAB, delete buttons, and edit buttons are hidden via CSS class `.locked` on `<body>`
-- When unlocked: show a small 4-digit input prompt, compare hash, grant `sessionStorage` token for the tab lifetime
-- PIN set/change flow accessible from the modal footer
-
-**Files:** `index.html`, `script.js`, `styles.css`
-
----
-
 ## Key Techniques Used
 
 | Technique | Purpose |
