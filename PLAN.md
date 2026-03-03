@@ -220,6 +220,101 @@ The workflow also supports `workflow_dispatch` so you can re-deploy manually fro
 
 ---
 
+---
+
+## Planned Features
+
+The following features are queued for future implementation. Each builds on the existing `localStorage`-driven architecture without adding any framework or build step.
+
+### Feature 1 — Edit Link
+**Goal:** Let users edit a link's label, URL, and category after it has been added — currently only add and delete are supported.
+
+**Implementation sketch:**
+- Add a pencil icon button (`.link-edit`) inside each `.link-btn`, styled like `.link-delete` (appears on hover)
+- Reuse the existing `#modal-overlay` / `#add-link-form`; add a hidden `#input-id` field
+- When the pencil is clicked, populate the form fields with the existing values and change the modal title to "Edit Link"
+- On submit, check for `input-id`: if populated, find the link by id and update it in place, then `saveLinks` + `renderLinks`
+
+**Files:** `index.html` (add `#input-id`), `script.js` (edit flow), `styles.css` (`.link-edit` button)
+
+---
+
+### Feature 2 — Search / Filter Bar
+**Goal:** A text input above the links list that narrows visible cards in real-time by label or URL keyword.
+
+**Implementation sketch:**
+- Add `<input class="search-input" id="search-input" placeholder="Search links…">` inside `.container`, between the profile header and `#links-container`
+- On `input` event, read value and call `renderLinks(loadLinks().filter(...))` — or hide/show existing DOM nodes for zero-flicker
+- Clear button (×) resets the filter
+- Style: full-width, same dark aesthetic as `.form-input`, `margin-bottom: 20px`
+
+**Files:** `index.html`, `script.js`, `styles.css`
+
+---
+
+### Feature 3 — Drag-and-Drop Reorder
+**Goal:** Users can drag link cards within or across categories to reorder them.
+
+**Implementation sketch:**
+- Set `draggable="true"` on each `.link-btn` during render
+- Listen for `dragstart`, `dragover`, `drop` on `.category-links` containers
+- On drop, splice the links array to the new position, `saveLinks`, re-render
+- CSS: `.link-btn.dragging { opacity: 0.4; }` and a drop-indicator line
+
+**Files:** `script.js` (drag logic), `styles.css` (drag states)
+
+---
+
+### Feature 4 — Export / Import JSON
+**Goal:** A simple backup and restore system — download all links as `.json` and re-upload them.
+
+**Implementation sketch:**
+- Add two small buttons (`.btn-export`, `.btn-import`) in the page footer area
+- **Export:** `JSON.stringify(loadLinks())` → Blob → `<a download="kolosal-links.json">` → `.click()`
+- **Import:** hidden `<input type="file" accept=".json">` → `FileReader.readAsText` → `JSON.parse` → validate shape → `saveLinks` + `renderLinks`
+
+**Files:** `index.html` (buttons + file input), `script.js`, `styles.css`
+
+---
+
+### Feature 5 — Copy URL to Clipboard
+**Goal:** A clipboard icon on each card copies the link URL without navigating away.
+
+**Implementation sketch:**
+- Add a `.link-copy` button (clipboard SVG) inside each `.link-btn`, appears on hover alongside `.link-delete`
+- `navigator.clipboard.writeText(link.url)` on click; swap the icon to a checkmark for 1.5 s as feedback
+- Fallback: `document.execCommand('copy')` via a temporary `<textarea>` for older browsers
+
+**Files:** `script.js`, `styles.css`
+
+---
+
+### Feature 6 — Click Counter
+**Goal:** Track how many times each link has been opened; display the count as a small dim badge on hover.
+
+**Implementation sketch:**
+- Separate localStorage key `kolosal_clicks` → `{ [id]: count }` object
+- Intercept each `.link-btn` click (before navigation), increment the counter, persist
+- Render count as `<span class="link-clicks">N</span>` inside the card, visible only on hover via CSS `opacity` transition
+
+**Files:** `script.js`, `styles.css`
+
+---
+
+### Feature 7 — PIN-Protected Edit Mode
+**Goal:** Lock add / delete / edit controls behind a 4-digit PIN so the page can be shared publicly without risk of accidental changes.
+
+**Implementation sketch:**
+- Store a hashed PIN in localStorage (`kolosal_pin`); default = no PIN (edit mode always unlocked)
+- Add a lock/unlock icon in the top-right corner of `.container`
+- When locked: FAB, delete buttons, and edit buttons are hidden via CSS class `.locked` on `<body>`
+- When unlocked: show a small 4-digit input prompt, compare hash, grant `sessionStorage` token for the tab lifetime
+- PIN set/change flow accessible from the modal footer
+
+**Files:** `index.html`, `script.js`, `styles.css`
+
+---
+
 ## Key Techniques Used
 
 | Technique | Purpose |

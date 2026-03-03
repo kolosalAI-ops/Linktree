@@ -30,10 +30,14 @@ LINKTREE/
 
 ## Features
 
-- **Exact design match** — black background, dark buttons, Epilogue font
-- **10 working links** — all pointing to the real Kolosal AI URLs
+- **Exact design match** — dark theme, Epilogue + Inter fonts, indigo accent
+- **10 working links** — grouped into Finance, Legal, Education, Workspace categories
 - **LinkedIn social icon**
-- **Staggered entrance animation** — buttons cascade in on load
+- **Add Link modal** — add new links at runtime via a pill button; data persists in `localStorage`
+- **Auto-detect** — category and icon are inferred from the URL when adding a link
+- **Delete links** — hover a card to reveal the × button
+- **Reset to defaults** — one-click restore from inside the modal
+- **Staggered entrance animation** — cards cascade in on load
 - **Ripple click effect** — Material-style tactile feedback
 - **Responsive** — works on mobile and desktop
 - **Accessible** — semantic HTML, `aria-label` on icon links, `alt` on images
@@ -123,6 +127,24 @@ cd Linktree
 2. Go to **Settings → Pages**
 3. Set **Source** to **GitHub Actions**
 4. The workflow runs automatically — live URL appears in the Actions log
+
+---
+
+## Roadmap
+
+Features planned for future iterations — all implementable without a framework or build step:
+
+| # | Feature | Description |
+|---|---------|-------------|
+| 1 | **Edit link** | Pencil icon on each card opens the modal pre-filled — edit label, URL, or category |
+| 2 | **Search / filter bar** | Real-time text input above the list that filters cards by label or URL |
+| 3 | **Drag-and-drop reorder** | Drag cards within or across categories; new order persists to `localStorage` |
+| 4 | **Export / Import JSON** | Download all links as `.json` (backup) or upload a file to restore |
+| 5 | **Copy URL to clipboard** | Clipboard icon on each card copies the URL; icon swaps to a checkmark as feedback |
+| 6 | **Click counter** | Tracks how many times each link was opened; count shown as a dim badge on hover |
+| 7 | **PIN-protected edit mode** | Lock add/delete/edit behind a 4-digit PIN for safe public sharing |
+
+Full implementation sketches for each feature are in [`PLAN.md`](./PLAN.md).
 
 ---
 
