@@ -1,21 +1,25 @@
 name: Deploy to GitHub Pages
 
+# Triggers: every push to main branch, or manual run from Actions tab
 on:
   push:
     branches:
       - main
   workflow_dispatch:
 
+# Required permissions for GitHub Pages deployment
 permissions:
-  contents: read
-  pages: write
-  id-token: write
+  contents: read   # read repo files
+  pages: write     # deploy to Pages
+  id-token: write  # OIDC token for Pages auth
 
+# Only one deployment runs at a time; skip queued runs but don't cancel in-progress
 concurrency:
   group: pages
   cancel-in-progress: false
 
 jobs:
+  # ── Job 1: Validate HTML, CSS, JS ────────────────────────────────
   validate:
     name: Validate Files
     runs-on: ubuntu-latest
@@ -25,6 +29,7 @@ jobs:
 
       - name: Check required files exist
         run: |
+          echo "Checking required project files..."
           for file in index.html styles.css script.js PLAN.md README.md; do
             if [ -f "$file" ]; then
               echo "  ✓ $file"
@@ -33,29 +38,38 @@ jobs:
               exit 1
             fi
           done
+          echo "All required files present."
 
       - name: Validate HTML structure
         run: |
-          grep -q '<!DOCTYPE html>' index.html && echo "  ✓ DOCTYPE"
-          grep -q '<html'          index.html && echo "  ✓ html tag"
-          grep -q 'styles.css'     index.html && echo "  ✓ styles.css linked"
-          grep -q 'script.js'      index.html && echo "  ✓ script.js linked"
-          grep -q 'viewport'       index.html && echo "  ✓ viewport meta"
+          echo "Validating index.html..."
+          # Check for essential HTML elements
+          grep -q '<!DOCTYPE html>' index.html && echo "  ✓ DOCTYPE found"
+          grep -q '<html' index.html && echo "  ✓ <html> tag found"
+          grep -q 'styles.css' index.html && echo "  ✓ styles.css linked"
+          grep -q 'script.js' index.html && echo "  ✓ script.js linked"
+          grep -q 'viewport' index.html && echo "  ✓ viewport meta found"
+          echo "HTML validation passed."
 
       - name: Check link count
         run: |
           count=$(grep -c 'class="link-btn"' index.html)
           echo "  Found $count link buttons"
-          [ "$count" -ge 10 ] || { echo "  ✗ Expected at least 10 links"; exit 1; }
+          if [ "$count" -lt 10 ]; then
+            echo "  ✗ Expected at least 10 links, found $count"
+            exit 1
+          fi
           echo "  ✓ Link count OK"
 
+  # ── Job 2: Deploy to GitHub Pages ────────────────────────────────
   deploy:
     name: Deploy to GitHub Pages
-    needs: validate
+    needs: validate          # only deploy after validate passes
     runs-on: ubuntu-latest
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
+
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -63,9 +77,10 @@ jobs:
       - name: Configure GitHub Pages
         uses: actions/configure-pages@v5
 
-      - name: Upload site artifact
+      - name: Upload site files as Pages artifact
         uses: actions/upload-pages-artifact@v3
         with:
+          # Upload the entire root directory (all HTML/CSS/JS/docs)
           path: .
 
       - name: Deploy to GitHub Pages
@@ -73,4 +88,6 @@ jobs:
         uses: actions/deploy-pages@v4
 
       - name: Print live URL
-        run: echo "Live URL: ${{ steps.deployment.outputs.page_url }}"
+        run: |
+          echo "Site deployed successfully!"
+          echo "Live URL: ${{ steps.deployment.outputs.page_url }}"
